@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { FaLinkedin, FaGithub, FaTelegram } from "react-icons/fa6";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
 import { DiJavascript, DiPython } from "react-icons/di";
+import pen_tool from "../assets/pen_tool.png" ;
 import "../styles/HomePage.css";
 import Skills from "../components/Skills";
 import Roadmap from "../components/Roadmap";
@@ -505,27 +506,7 @@ const HomePage = () => {
           </div>
 
           <div className="code-section">
-            <div className="code-preview">
-              <div className="code-header">
-                <div
-                  className={`code-tab ${activeTab === "js" ? "active" : ""}`}
-                  onClick={() => setActiveTab("js")}
-                >
-                  <DiJavascript className="language-icon js-icon" />
-                  start.js
-                </div>
-                <div
-                  className={`code-tab ${activeTab === "py" ? "active" : ""}`}
-                  onClick={() => setActiveTab("py")}
-                >
-                  <DiPython className="language-icon py-icon" />
-                  master.py
-                </div>
-              </div>
-              <div className="code-content">
-                {renderCodeContent(activeTab === "js" ? jsCode : pyCode)}
-              </div>
-            </div>
+            <img src={pen_tool}/>
           </div>
         </div>{" "}
         <div
