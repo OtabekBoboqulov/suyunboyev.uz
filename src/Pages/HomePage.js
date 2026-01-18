@@ -87,86 +87,6 @@ const HomePage = () => {
           throw new Error("Invalid data format received from server");
         }
 
-        // Force graphic design title to match theme
-        if (data.profile_data.title && (data.profile_data.title.toLowerCase().includes("developer") || data.profile_data.title.toLowerCase().includes("software"))) {
-          data.profile_data.title = "Senior Graphic Designer";
-        } else if (!data.profile_data.title) {
-          data.profile_data.title = "Graphic Designer";
-        }
-
-        // Set design-themed bio if empty or generic
-        const defaultBio = "Passionate graphic designer dedicated to creating impactful visual experiences. Specializing in branding, digital design, and illustration, I bring ideas to life through creative thinking and meticulous attention to detail.";
-        if (!data.profile_data.bio || data.profile_data.bio === "Lorem impus") {
-          data.profile_data.bio = defaultBio;
-        }
-
-        // Add default data if API returns empty or needs enhancement for design theme
-        if (!data.skills_data || data.skills_data.length === 0) {
-          data.skills_data = [
-            { id: 1, name: "Adobe Photoshop", level: "Expert" },
-            { id: 2, name: "Adobe Illustrator", level: "Expert" },
-            { id: 3, name: "Figma", level: "Advanced" },
-            { id: 4, name: "Brand Identity", level: "Expert" },
-            { id: 5, name: "Typography", level: "Advanced" },
-            { id: 6, name: "UI/UX Design", level: "Intermediate" }
-          ];
-        }
-        if (!data.language_data || data.language_data.length === 0) {
-          data.language_data = [
-            { id: 1, name: "Visual Design", progress: 95, color: "#00ffa3" },
-            { id: 2, name: "Branding", progress: 90, color: "#2563eb" },
-            { id: 3, name: "Illustration", progress: 85, color: "#7c3aed" }
-          ];
-        }
-        if (!data.projects_data || data.projects_data.length === 0) {
-          data.projects_data = [
-            {
-              id: 1,
-              title: "EcoStore Branding",
-              description: "Full brand identity for a sustainable products store, including logo design, color palette, and packaging.",
-              technologies: "Illustrator, Photoshop",
-              image: ""
-            },
-            {
-              id: 2,
-              title: "FitLife App Design",
-              description: "Mobile application UI/UX design focused on fitness tracking and community engagement.",
-              technologies: "Figma, Adobe XD",
-              image: ""
-            }
-          ];
-        }
-        if (!data.experience_data || data.experience_data.length === 0) {
-          data.experience_data = [
-            {
-              id: 1,
-              company_name: "Creative Studio",
-              position: "Lead Designer",
-              start_date: "2021-01-01",
-              end_date: null
-            },
-            {
-              id: 2,
-              company_name: "Design Agency",
-              position: "Graphic Designer",
-              start_date: "2019-06-01",
-              end_date: "2020-12-31"
-            }
-          ];
-        }
-        if (!data.education_data || data.education_data.length === 0) {
-          data.education_data = [
-            {
-              id: 1,
-              institution: "Design University",
-              degree: "Bachelor",
-              field_of_study: "Graphic Design",
-              start_year: "2015",
-              end_year: "2019"
-            }
-          ];
-        }
-
         setProfileData(data);
         setLoading(false);
       } catch (error) {
@@ -182,7 +102,10 @@ const HomePage = () => {
   useEffect(() => {
     if (!profileData || !isVisible) return;
 
-    const bio = profileData.profile_data.bio;
+    const rawBio = profileData.profile_data.bio;
+    const bio = rawBio === "Lorem impus"
+      ? "Passionate graphic designer dedicated to creating impactful visual experiences. Specializing in branding, digital illustration, and user-centric design to bring creative visions to life."
+      : rawBio;
 
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
@@ -320,13 +243,13 @@ const HomePage = () => {
                   About
                 </a>
                 <a href="#skills" onClick={() => setNavOpen(false)}>
-                  Skills
+                  Expertise
                 </a>
                 <a href="#roadmap" onClick={() => setNavOpen(false)}>
-                  Roadmap
+                  Journey
                 </a>
                 <a href="#certificates" onClick={() => setNavOpen(false)}>
-                  Certificates
+                  Accreditation
                 </a>
                 <a href="#contact" onClick={() => setNavOpen(false)}>
                   Contact
@@ -380,7 +303,11 @@ const HomePage = () => {
               I'm <span className="accent">{firstName}</span>
             </h1>
             <div className="role">
-              I'm a <span className="accent">{profileData.profile_data.title}</span>
+              I'm a <span className="accent">
+                {profileData.profile_data.title === "Software Engineer" || !profileData.profile_data.title
+                  ? "Graphic Designer"
+                  : profileData.profile_data.title}
+              </span>
             </div>
             <p className="description">
               <span className="typing-text">{typedText}</span>
@@ -436,7 +363,7 @@ const HomePage = () => {
           data-visible={isAboutVisible}
         >
           <h2 className="section-title">
-            About
+            Creative Profile
           </h2>
           <div className="about-card">
             <div className="about-image-card">
@@ -451,8 +378,10 @@ const HomePage = () => {
             <div className="about-content">
               <p className="about-text">
                 {profileData.profile_data && profileData.profile_data.bio
-                  ? profileData.profile_data.bio
-                  : "No about text available."}
+                  ? (profileData.profile_data.bio === "Lorem impus"
+                      ? "Passionate graphic designer dedicated to creating impactful visual experiences. Specializing in branding, digital illustration, and user-centric design to bring creative visions to life."
+                      : profileData.profile_data.bio)
+                  : "Passionate graphic designer dedicated to creating impactful visual experiences."}
               </p>
               <div className="skills-categories">
                 {profileData.skills_data &&
@@ -464,26 +393,45 @@ const HomePage = () => {
                     </span>
                   ))
                 ) : (
-                  <span className="skill-item">No skills listed</span>
+                  <>
+                    <span className="skill-item">Visual Branding</span>
+                    <span className="skill-item">Digital Illustration</span>
+                    <span className="skill-item">Typography</span>
+                    <span className="skill-item">UI/UX Design</span>
+                  </>
                 )}
               </div>
             </div>
           </div>
         </div>
-        {/* Skills Section - tech-grid dynamic from API */}
-        {profileData.skills_data && profileData.skills_data.length > 0 && (
-          <Skills
-            techSkills={profileData.skills_data}
-            language_data={profileData.language_data}
-          />
-        )}
+        {/* Skills Section - tech-grid dynamic from API or fallbacks */}
+        <Skills
+          techSkills={profileData.skills_data && profileData.skills_data.length > 0
+            ? profileData.skills_data
+            : [
+                { name: "Adobe Illustrator", description: "Vector graphics and illustration", icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 0L24 24H0L12 0Z" fill="currentColor"/></svg>' },
+                { name: "Adobe Photoshop", description: "Image editing and compositing", icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" fill="currentColor"/></svg>' },
+                { name: "Figma", description: "Interface design and prototyping", icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="10" fill="currentColor"/></svg>' },
+                { name: "InDesign", description: "Layout and page design", icon: '<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h24v24H0z" fill="currentColor"/></svg>' }
+              ]
+          }
+          language_data={profileData.language_data && profileData.language_data.length > 0
+            ? profileData.language_data
+            : [
+                { name: "Branding", progress: 95, color: "var(--accent)" },
+                { name: "Illustration", progress: 85, color: "#7c3aed" },
+                { name: "Typography", progress: 90, color: "#3b82f6" }
+              ]
+          }
+        />
         {/* Projects Section */}
         <div className="projects-section" id="projects">
           <h2 className="section-title">
-            Projects
+            Creative Projects
           </h2>
           <div className="projects-container">
-            {profileData.projects_data.map((project) => (
+            {profileData.projects_data.length > 0 ? (
+              profileData.projects_data.map((project) => (
               <div
                 key={project.id}
                 className="project-card"
@@ -530,16 +478,21 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))) : (
+              <div className="empty-collection">
+                <p>New creative works coming soon.</p>
+              </div>
+            )}
           </div>
         </div>
         {/* Education Section */}
         <div className="education-section" id="education">
           <h2 className="section-title">
-            Education
+            Academic Background
           </h2>
           <div className="education-container">
-            {profileData.education_data.map((edu, index) => (
+            {profileData.education_data.length > 0 ? (
+              profileData.education_data.map((edu, index) => (
               <div
                 key={edu.id}
                 className="education-card"
@@ -555,7 +508,11 @@ const HomePage = () => {
                   </p>
                 </div>
               </div>
-            ))}
+            ))) : (
+              <div className="empty-collection">
+                <p>Foundation of creative expertise through academic excellence.</p>
+              </div>
+            )}
           </div>
         </div>
         {/* Certificates Section */}

@@ -48,9 +48,9 @@ const Skills = ({ techSkills, language_data }) => {
   return (
     <section className="skills-section" id="skills" ref={sectionRef}>
       <div className="skills-header" ref={headerRef}>
-        <span className="tag">Skills</span>
-        <h2>Skills and Proficiencies</h2>
-        <p>Expertise in Creative Design and Digital Tools</p>
+        <span className="tag">Expertise</span>
+        <h2>Design Proficiencies</h2>
+        <p>Mastery in Creative Design and Digital Tools</p>
       </div>
 
       {/* Main Skills Section - use language_data prop if available */}
