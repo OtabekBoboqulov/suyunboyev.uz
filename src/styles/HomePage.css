@@ -241,7 +241,7 @@ nav.scrolled {
   box-shadow: 0 5px 15px rgba(37, 99, 235, 0.2);
 }
 
-.code-section {
+.visual-section {
   flex: 0 0 55%;
   display: flex;
   justify-content: flex-end;
@@ -250,138 +250,37 @@ nav.scrolled {
   animation: slideInRight 0.8s ease-out 0.4s forwards;
 }
 
-.code-preview {
-  width: 100%;
-  max-width: 550px;
-  background: var(--code-bg);
-  border-radius: 8px;
-  border: 1px solid var(--code-tab-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
+.design-blob {
+  position: fixed;
+  width: 40vw;
+  height: 40vw;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: -1;
+  opacity: 0.15;
+  pointer-events: none;
 }
 
-@media (max-width: 900px) {
-  .code-preview {
-    max-width: 98vw;
-    min-width: 0;
-  }
+.blob-1 {
+  background: var(--accent);
+  top: -10%;
+  right: -5%;
+  animation: float 20s infinite alternate;
 }
 
-.code-header {
-  background: var(--code-header-bg);
-  padding: 0;
-  border-bottom: 1px solid var(--code-tab-border);
-  display: flex;
-  gap: 0;
+.blob-2 {
+  background: #7c3aed;
+  bottom: -10%;
+  left: -5%;
+  animation: float 25s infinite alternate-reverse;
 }
 
-.code-tab {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  color: var(--text-secondary);
-  cursor: pointer;
-  border-right: 1px solid var(--code-tab-border);
-  background: var(--code-tab-bg);
-  min-width: 100px;
-  position: relative;
+@keyframes float {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(5%, 5%) scale(1.1); }
+  66% { transform: translate(-5%, 10%) scale(0.9); }
+  100% { transform: translate(0, 0) scale(1); }
 }
-
-.code-tab.active {
-  background: var(--code-tab-active);
-  color: var(--text-primary);
-}
-
-.code-tab.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--code-tab-active);
-}
-
-.code-content {
-  position: relative;
-  flex-grow: 1;
-  overflow-y: auto;
-  min-height: 300px;
-  padding: 0;
-  font-family: "Consolas", "Monaco", monospace;
-  font-size: 14px;
-  line-height: 20px;
-  background: var(--code-bg);
-}
-
-.line-numbers {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 50px;
-  background: var(--code-bg);
-  border-right: 1px solid var(--code-tab-border);
-  user-select: none;
-  padding: 12px 0;
-}
-
-.line-numbers span {
-  display: block;
-  padding: 0 12px 0 0;
-  color: var(--code-line-number);
-  font-size: 14px;
-  line-height: 20px;
-  text-align: right;
-  height: 20px;
-}
-
-.code-lines {
-  margin-left: 50px;
-  padding: 12px 16px;
-}
-
-.code-line {
-  height: 20px;
-  padding: 0;
-  white-space: pre;
-  color: var(--code-text);
-}
-
-/* Syntax highlighting */
-.comment {
-  color: var(--code-comment);
-}
-.keyword {
-  color: var(--code-keyword);
-}
-.string {
-  color: var(--code-string);
-}
-.number {
-  color: var(--code-number);
-}
-.function {
-  color: var(--code-function);
-}
-.variable {
-  color: var(--code-variable);
-}
-.property {
-  color: var(--code-property);
-}
-.punctuation {
-  color: var(--code-punctuation);
-}
-.operator {
-  color: var(--code-operator);
-}
-
 .theme-toggle {
   width: 40px;
   height: 40px;
@@ -845,7 +744,7 @@ nav.scrolled {
   font-family: "Monaco", monospace;
 }
 
-.project-tech {
+.project-tools {
   color: var(--accent);
   font-size: 0.95rem;
   margin-bottom: 2rem;
@@ -1495,13 +1394,12 @@ nav.scrolled {
     margin-top: 3rem; /* Add more space at the top for mobile */
   }
   .hero-content,
-  .code-section {
+  .visual-section {
     max-width: 100%;
     flex: 1 1 100%;
     padding: 0;
-  }
-  .code-section {
     padding-left: 0;
+    margin-top: 2rem;
   }
 }
 
@@ -1637,22 +1535,8 @@ nav.scrolled {
     font-size: 0.85rem;
     padding: 0.5rem 1.1rem;
   }
-  .code-preview {
-    max-width: 98vw;
-    min-width: 0;
-  }
-  .code-header {
-    min-width: 0;
-  }
-  .line-numbers {
-    width: 30px;
-    font-size: 11px;
-  }
-  .code-lines {
-    margin-left: 30px;
-    padding: 8px 4px;
-    font-size: 11px;
-  }
+
+
   .profile-image {
     border-radius: 6px;
   }
@@ -1736,7 +1620,7 @@ nav.scrolled {
   line-height: 1.6;
 }
 
-.modal-tech {
+.modal-tools {
   color: var(--accent);
   font-family: "Monaco", monospace;
 }

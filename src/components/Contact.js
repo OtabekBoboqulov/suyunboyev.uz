@@ -99,8 +99,8 @@ const Contact = ({ profileData }) => {
     <div className="contact-section" id="contact" ref={sectionRef}>
       <div className="contact-content">
         <div className="contact-left">
-          <span className="tag">&lt;Get in Touch/&gt;</span>
-          <h2>Let's Build Something</h2>
+          <span className="tag">Get in Touch</span>
+          <h2>Let's Create Something</h2>
           <p>
             Together<span className="accent">.</span>
           </p>

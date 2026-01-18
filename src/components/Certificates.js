@@ -8,9 +8,7 @@ const Certificates = ({ certificatesData, openCertificateModal }) => {
   return (
     <div className="certificates-section" id="certificates">
       <h2 className="section-title">
-        <span className="angle-bracket">&lt;</span>
         Certificates
-        <span className="angle-bracket">&gt;</span>
       </h2>
       <div className="certificates-container">
         {certificatesData.map((certificate, index) => (

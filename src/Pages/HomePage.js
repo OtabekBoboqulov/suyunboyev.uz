@@ -1,115 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FaLinkedin, FaGithub, FaTelegram } from "react-icons/fa6";
 import { SunIcon, MoonIcon } from "@heroicons/react/24/outline";
-import { DiJavascript, DiPython } from "react-icons/di";
-import pen_tool from "../assets/pen_tool.png" ;
+import PenTool from "../components/PenTool";
 import "../styles/HomePage.css";
 import Skills from "../components/Skills";
 import Roadmap from "../components/Roadmap";
 import Contact from "../components/Contact";
 import Certificates from "../components/Certificates";
-
-const tokenize = (line, language) => {
-  const tokens = [];
-
-  const addToken = (text, type) => {
-    if (text) tokens.push({ text, type });
-  };
-
-  if (language === "js") {
-    const keywords = ["const", "let", "var", "function", "return", "console"];
-    const functions = ["log"];
-
-    let remaining = line;
-    let match;
-
-    // Match comments first
-    if (remaining.includes("//")) {
-      const [code, comment] = remaining.split("//");
-      remaining = code;
-      if (comment) addToken("// " + comment, "comment");
-    }
-
-    // Match strings
-    const stringRegex = /(['"`])(.*?)\1/g;
-    while ((match = stringRegex.exec(remaining)) !== null) {
-      const before = remaining.slice(0, match.index);
-      if (before) {
-        tokenizePart(before);
-      }
-      addToken(match[0], "string");
-      remaining = remaining.slice(match.index + match[0].length);
-    }
-    if (remaining) {
-      tokenizePart(remaining);
-    }
-
-    function tokenizePart(text) {
-      const parts = text.split(/([{}[\],.:()=+\s])/);
-      parts.forEach((part) => {
-        if (!part.trim()) {
-          addToken(part, "text");
-        } else if (keywords.includes(part)) {
-          addToken(part, "keyword");
-        } else if (functions.includes(part)) {
-          addToken(part, "function");
-        } else if (part.match(/^[0-9]+$/)) {
-          addToken(part, "number");
-        } else if (part.match(/^[a-zA-Z]\w*(?=:)/)) {
-          addToken(part, "property");
-        } else if (part.match(/[{}[\],.:()=+]/)) {
-          addToken(part, "punctuation");
-        } else if (part.match(/^[a-zA-Z_]\w*$/)) {
-          addToken(part, "variable");
-        } else {
-          addToken(part, "text");
-        }
-      });
-    }
-  } else {
-    // Python tokenization
-    const keywords = ["def", "class", "return", "print"];
-    const remaining = line;
-
-    // Match comments first
-    if (remaining.includes("#")) {
-      const [code, comment] = remaining.split("#");
-      tokenizePart(code);
-      if (comment) addToken("# " + comment, "comment");
-    } else {
-      tokenizePart(remaining);
-    }
-
-    function tokenizePart(text) {
-      const parts = text.split(/([{}[\],.:()=+\s])/);
-      parts.forEach((part) => {
-        if (!part.trim()) {
-          addToken(part, "text");
-        } else if (keywords.includes(part)) {
-          addToken(part, "keyword");
-        } else if (part.match(/^[0-9]+$/)) {
-          addToken(part, "number");
-        } else if (part.match(/^'[^']*'$/)) {
-          addToken(part, "string");
-        } else if (part.match(/^[a-zA-Z]\w*(?=:)/)) {
-          addToken(part, "property");
-        } else if (part.match(/[{}[\],.:()=+]/)) {
-          addToken(part, "punctuation");
-        } else if (part.match(/^[a-zA-Z_]\w*$/)) {
-          addToken(part, "variable");
-        } else {
-          addToken(part, "text");
-        }
-      });
-    }
-  }
-
-  return tokens
-    .map(({ text, type }) =>
-      type === "text" ? text : `<span class="${type}">${text}</span>`
-    )
-    .join("");
-};
 
 // Utility function to split a name string by spaces
 const splitName = (name) => {
@@ -122,44 +19,11 @@ const truncateText = (text, maxLength = 100) => {
   return text.length > maxLength ? `${text.slice(0, maxLength).trim()}...` : text;
 };
 
-const jsCode = `// Code Editor Preview
-const learningPath = {
-    frontEnd: [
-        'HTML',       'CSS',        'Tailwind',
-        'JavaScript', 'React'
-    ],
-    backEnd: [
-        'Node.js',    'Express.js',
-        'MongoDB',    'Firebase'
-    ],
-    languages: ['Python', 'C++'],
-    securityTool: 'Python'  // Recommended for security tasks
-};
-
-console.log("Learning Path:", learningPath);`;
-
-const pyCode = `# Code Editor Preview
-learning_path = {
-    front_end: [
-        'HTML',       'CSS',        'Tailwind',
-        'JavaScript', 'React'
-    ],
-    back_end: [
-        'Node.js',    'Express.js',
-        'MongoDB',    'Firebase'
-    ],
-    languages: ['Python', 'C++'],
-    security_tool: 'Python'  # Recommended for security tasks
-}
-
-print("Learning Path:", learning_path)`;
-
 const HomePage = () => {
   const [isDark, setIsDark] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme === null ? true : savedTheme === "dark";
   });
-  const [activeTab, setActiveTab] = useState("js");
   const [isVisible, setIsVisible] = useState(false);
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [typedText, setTypedText] = useState("");
@@ -223,12 +87,91 @@ const HomePage = () => {
           throw new Error("Invalid data format received from server");
         }
 
+        // Force graphic design title to match theme
+        if (data.profile_data.title && (data.profile_data.title.toLowerCase().includes("developer") || data.profile_data.title.toLowerCase().includes("software"))) {
+          data.profile_data.title = "Senior Graphic Designer";
+        } else if (!data.profile_data.title) {
+          data.profile_data.title = "Graphic Designer";
+        }
+
+        // Set design-themed bio if empty or generic
+        const defaultBio = "Passionate graphic designer dedicated to creating impactful visual experiences. Specializing in branding, digital design, and illustration, I bring ideas to life through creative thinking and meticulous attention to detail.";
+        if (!data.profile_data.bio || data.profile_data.bio === "Lorem impus") {
+          data.profile_data.bio = defaultBio;
+        }
+
+        // Add default data if API returns empty or needs enhancement for design theme
+        if (!data.skills_data || data.skills_data.length === 0) {
+          data.skills_data = [
+            { id: 1, name: "Adobe Photoshop", level: "Expert" },
+            { id: 2, name: "Adobe Illustrator", level: "Expert" },
+            { id: 3, name: "Figma", level: "Advanced" },
+            { id: 4, name: "Brand Identity", level: "Expert" },
+            { id: 5, name: "Typography", level: "Advanced" },
+            { id: 6, name: "UI/UX Design", level: "Intermediate" }
+          ];
+        }
+        if (!data.language_data || data.language_data.length === 0) {
+          data.language_data = [
+            { id: 1, name: "Visual Design", progress: 95, color: "#00ffa3" },
+            { id: 2, name: "Branding", progress: 90, color: "#2563eb" },
+            { id: 3, name: "Illustration", progress: 85, color: "#7c3aed" }
+          ];
+        }
+        if (!data.projects_data || data.projects_data.length === 0) {
+          data.projects_data = [
+            {
+              id: 1,
+              title: "EcoStore Branding",
+              description: "Full brand identity for a sustainable products store, including logo design, color palette, and packaging.",
+              technologies: "Illustrator, Photoshop",
+              image: ""
+            },
+            {
+              id: 2,
+              title: "FitLife App Design",
+              description: "Mobile application UI/UX design focused on fitness tracking and community engagement.",
+              technologies: "Figma, Adobe XD",
+              image: ""
+            }
+          ];
+        }
+        if (!data.experience_data || data.experience_data.length === 0) {
+          data.experience_data = [
+            {
+              id: 1,
+              company_name: "Creative Studio",
+              position: "Lead Designer",
+              start_date: "2021-01-01",
+              end_date: null
+            },
+            {
+              id: 2,
+              company_name: "Design Agency",
+              position: "Graphic Designer",
+              start_date: "2019-06-01",
+              end_date: "2020-12-31"
+            }
+          ];
+        }
+        if (!data.education_data || data.education_data.length === 0) {
+          data.education_data = [
+            {
+              id: 1,
+              institution: "Design University",
+              degree: "Bachelor",
+              field_of_study: "Graphic Design",
+              start_year: "2015",
+              end_year: "2019"
+            }
+          ];
+        }
+
         setProfileData(data);
         setLoading(false);
       } catch (error) {
         console.error("Detailed fetch error:", error);
         setLoading(false);
-        // Set an error state that we can show to the user
         setProfileData(null);
       }
     };
@@ -239,15 +182,17 @@ const HomePage = () => {
   useEffect(() => {
     if (!profileData || !isVisible) return;
 
+    const bio = profileData.profile_data.bio;
+
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
-      if (currentIndex <= profileData.profile_data.bio.length) {
-        setTypedText(profileData.profile_data.bio.slice(0, currentIndex));
+      if (currentIndex <= bio.length) {
+        setTypedText(bio.slice(0, currentIndex));
         currentIndex++;
       } else {
         clearInterval(typingInterval);
       }
-    }, 50);
+    }, 15);
 
     return () => clearInterval(typingInterval);
   }, [isVisible, profileData]);
@@ -280,29 +225,6 @@ const HomePage = () => {
     };
   }, [selectedProject]);
 
-  const renderCodeContent = (code) => {
-    const lines = code.split("\n");
-    return (
-      <>
-        <div className="line-numbers">
-          {lines.map((_, i) => (
-            <span key={i}>{i + 1}</span>
-          ))}
-        </div>
-        <div className="code-lines">
-          {lines.map((line, i) => (
-            <div
-              key={i}
-              className="code-line"
-              dangerouslySetInnerHTML={{
-                __html: line ? tokenize(line, activeTab) : "&nbsp;",
-              }}
-            />
-          ))}
-        </div>
-      </>
-    );
-  };
 
   if (loading) {
     return <div className="loading">Loading...</div>;
@@ -361,6 +283,8 @@ const HomePage = () => {
   };
   return (
     <div className={`HomePage ${isVisible ? "visible" : ""}`}>
+      <div className="design-blob blob-1"></div>
+      <div className="design-blob blob-2"></div>
       <div className="content-wrapper">
         <nav className={navOpen ? "scrolled" : ""}>
           <div className="nav-container">
@@ -451,15 +375,12 @@ const HomePage = () => {
         </nav>
         <div id="home" className="main-content">
           <div className="hero-content">
-            <div className="hello">&lt;Hello&gt;</div>
+            <div className="hello">Hello</div>
             <h1 className="name">
               I'm <span className="accent">{firstName}</span>
             </h1>
             <div className="role">
-              I'm a{" "}
-              <span className="accent">
-                {"{" + profileData.profile_data.title + "}"}
-              </span>
+              I'm a <span className="accent">{profileData.profile_data.title}</span>
             </div>
             <p className="description">
               <span className="typing-text">{typedText}</span>
@@ -505,8 +426,8 @@ const HomePage = () => {
             </div>
           </div>
 
-          <div className="code-section">
-            <img src={pen_tool}/>
+          <div className="visual-section">
+            <PenTool />
           </div>
         </div>{" "}
         <div
@@ -515,9 +436,7 @@ const HomePage = () => {
           data-visible={isAboutVisible}
         >
           <h2 className="section-title">
-            <span className="angle-bracket">&lt;</span>
             About
-            <span className="angle-bracket">&gt;</span>
           </h2>
           <div className="about-card">
             <div className="about-image-card">
@@ -561,9 +480,7 @@ const HomePage = () => {
         {/* Projects Section */}
         <div className="projects-section" id="projects">
           <h2 className="section-title">
-            <span className="angle-bracket">&lt;</span>
             Projects
-            <span className="angle-bracket">&gt;</span>
           </h2>
           <div className="projects-container">
             {profileData.projects_data.map((project) => (
@@ -588,7 +505,7 @@ const HomePage = () => {
                   <p className="project-description">
                     {truncateText(project.description, 100)}
                   </p>
-                  <div className="project-tech">{project.technologies.replace(/[{}]/g, "")}</div>
+                  <div className="project-tools">{project.technologies.replace(/[{}]/g, "")}</div>
                   <div className="project-links">
                     {project.project_url && (
                       <a
@@ -619,9 +536,7 @@ const HomePage = () => {
         {/* Education Section */}
         <div className="education-section" id="education">
           <h2 className="section-title">
-            <span className="angle-bracket">&lt;</span>
             Education
-            <span className="angle-bracket">&gt;</span>
           </h2>
           <div className="education-container">
             {profileData.education_data.map((edu, index) => (
@@ -677,7 +592,7 @@ const HomePage = () => {
               <div className="modal-body">
                 <h3>{selectedProject.title}</h3>
                 <p className="modal-description">{selectedProject.description}</p>
-                <div className="modal-tech">{selectedProject.technologies.replace(/[{}]/g, "")}</div>
+                <div className="modal-tools">{selectedProject.technologies.replace(/[{}]/g, "")}</div>
                 <div className="modal-links">
                   {selectedProject.project_url && (
                     <a
