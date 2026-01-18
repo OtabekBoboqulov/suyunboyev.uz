@@ -56,11 +56,6 @@ const Roadmap = ({
         sublabel: "Experience",
       },
       {
-        value: "95%",
-        label: "Positive Feedback",
-        sublabel: "from clients",
-      },
-      {
         value: `${companiesCount}`,
         label: "Collaborations",
         sublabel: "with brands",

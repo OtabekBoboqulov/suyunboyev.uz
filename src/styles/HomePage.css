@@ -576,7 +576,7 @@ nav.scrolled {
   font-size: 1.1rem;
   line-height: 1.8;
   margin-bottom: 2rem;
-  font-family: "Monaco", "Menlo", monospace;
+  font-family: "Inter", sans-serif;
 }
 
 .skills-categories {
@@ -741,7 +741,7 @@ nav.scrolled {
   font-size: 1.1rem;
   line-height: 1.6;
   margin-bottom: 1.5rem;
-  font-family: "Monaco", monospace;
+  font-family: "Inter", sans-serif;
 }
 
 .project-tools {
@@ -915,7 +915,7 @@ nav.scrolled {
 .education-content .degree {
   color: var(--text-secondary);
   font-size: 1.1rem;
-  font-family: "Monaco", monospace;
+  font-family: "Inter", sans-serif;
 }
 
 @keyframes slideIn {
@@ -1622,7 +1622,7 @@ nav.scrolled {
 
 .modal-tools {
   color: var(--accent);
-  font-family: "Monaco", monospace;
+  font-family: "Inter", sans-serif;
 }
 
 .modal-links {
@@ -1680,4 +1680,21 @@ nav.scrolled {
   height: 100%;
   object-fit: contain;
   border-radius: 8px;
+}
+
+.empty-collection {
+  width: 100%;
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-secondary);
+  border: 1px dashed var(--accent);
+  border-radius: 12px;
+  color: var(--text-secondary);
+  font-family: "Inter", sans-serif;
+  opacity: 0.8;
+}
+
+.empty-collection p {
+  margin: 0;
+  font-size: 1.1rem;
 }
