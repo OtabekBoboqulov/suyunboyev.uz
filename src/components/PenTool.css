@@ -1,0 +1,84 @@
+.pen-tool-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.pen-tool-svg {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  overflow: visible;
+}
+
+.drawing-path {
+  stroke-dasharray: 800;
+  stroke-dashoffset: 800;
+  animation: drawCurve 8s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px var(--accent));
+}
+
+.pen-nib {
+  offset-path: path("M 50 300 Q 150 100 250 300 T 350 100");
+  animation: moveNib 8s ease-in-out infinite;
+  offset-rotate: auto 180deg;
+}
+
+.anchor-point {
+  fill: var(--bg-primary);
+  stroke: var(--accent);
+  stroke-width: 2px;
+  animation: fadeInOut 4s infinite alternate;
+}
+
+.handle-line {
+  stroke: var(--text-secondary);
+  stroke-width: 1px;
+  stroke-dasharray: 4;
+  opacity: 0.5;
+}
+
+.handle-point {
+  fill: var(--accent);
+}
+
+@keyframes drawCurve {
+  0%, 10% {
+    stroke-dashoffset: 800;
+  }
+  40%, 60% {
+    stroke-dashoffset: 0;
+  }
+  90%, 100% {
+    stroke-dashoffset: -800;
+  }
+}
+
+@keyframes moveNib {
+  0%, 10% {
+    offset-distance: 0%;
+    opacity: 0;
+  }
+  15% {
+    opacity: 1;
+  }
+  40%, 60% {
+    offset-distance: 100%;
+    opacity: 1;
+  }
+  65% {
+    opacity: 0;
+  }
+  100% {
+    offset-distance: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeInOut {
+  from { opacity: 0.3; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.1); }
+}

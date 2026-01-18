@@ -1,31 +1,5 @@
 import React, { useEffect, useRef } from "react";
-// import skillsData from "../data/skills.json";
-// import {
-//   FaHtml5,
-//   FaCss3Alt,
-//   FaJs,
-//   FaReact,
-//   FaNodeJs,
-//   FaGithub,
-//   FaFigma,
-//   FaCode,
-// } from "react-icons/fa";
-// import { SiTailwindcss, SiMongodb, SiAdobexd } from "react-icons/si";
 import "../styles/Skills.css";
-
-// const iconMap = {
-//   html5: FaHtml5,
-//   css3: FaCss3Alt,
-//   js: FaJs,
-//   react: FaReact,
-//   node: FaNodeJs,
-//   tailwind: SiTailwindcss,
-//   mongodb: SiMongodb,
-//   github: FaGithub,
-//   vscode: FaCode,
-//   figma: FaFigma,
-//   adobexd: SiAdobexd,
-// };
 
 const Skills = ({ techSkills, language_data }) => {
   const sectionRef = useRef(null);
@@ -71,16 +45,12 @@ const Skills = ({ techSkills, language_data }) => {
     return () => observer.disconnect();
   }, []);
 
-  // Debugging: log the data used for rendering
-  console.log("Main Skills (language_data):", language_data);
-  console.log("Tech Grid (techSkills):", techSkills);
-
   return (
     <section className="skills-section" id="skills" ref={sectionRef}>
       <div className="skills-header" ref={headerRef}>
-        <span className="tag">&lt;Skills&gt;</span>
+        <span className="tag">Skills</span>
         <h2>Skills and Proficiencies</h2>
-        <p>Commanding Expertise in Digital Technologies and Tools</p>
+        <p>Expertise in Creative Design and Digital Tools</p>
       </div>
 
       {/* Main Skills Section - use language_data prop if available */}

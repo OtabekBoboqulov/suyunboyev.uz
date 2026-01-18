@@ -17,8 +17,13 @@ const Roadmap = ({
     let minStart = null;
     let maxEnd = null;
     experienceData.forEach((exp) => {
-      const start = new Date(exp.start_date);
-      const end = exp.end_date ? new Date(exp.end_date) : new Date();
+      const startStr = exp.start_date || exp.startDate || exp.start_year;
+      const endStr = exp.end_date || exp.endDate || exp.end_year;
+      const start = startStr ? new Date(startStr) : null;
+      const end = endStr ? new Date(endStr) : new Date();
+
+      if (!start || isNaN(start.getTime())) return;
+
       if (!minStart || start < minStart) minStart = start;
       if (!maxEnd || end > maxEnd) maxEnd = end;
     });
@@ -36,14 +41,14 @@ const Roadmap = ({
     }
 
     // Worked Companies
-    const companies = new Set(experienceData.map((exp) => exp.company_name));
+    const companies = new Set(experienceData.map((exp) => exp.company_name || exp.company || exp.institution).filter(Boolean));
     const companiesCount = companies.size;
 
     return [
       {
         value: `${projectsCount}`,
-        label: "Projects Development",
-        sublabel: "from scratch",
+        label: "Creative Projects",
+        sublabel: "from concept",
       },
       {
         value: years > 0 ? `${years}+` : "1+",
@@ -53,12 +58,12 @@ const Roadmap = ({
       {
         value: "95%",
         label: "Positive Feedback",
-        sublabel: "from work",
+        sublabel: "from clients",
       },
       {
         value: `${companiesCount}`,
-        label: "Worked Companies",
-        sublabel: "Total",
+        label: "Collaborations",
+        sublabel: "with brands",
       },
     ];
   }, [experienceData, projectsData]);
